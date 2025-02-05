@@ -1,0 +1,143 @@
+# configuração de um cluster com 5 nodes (1 ctrl, 4 worker)
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+networking:
+  # CNI padrao sera desabilitado
+  disableDefaultCNI: true
+
+nodes:
+#CONTROL-PLANE
+- role: control-plane
+  extraMounts:
+  - hostPath: /full/path/plugins/bin 
+    containerPath: /opt/cni/bin
+
+#REDE-01
+- role: worker
+  extraMounts:
+    - hostPath: ./Volumes
+      containerPath: /vol
+  labels:
+    rede: 1
+
+#REDE-01
+- role: worker
+  extraMounts:
+    - hostPath: ./Volumes
+      containerPath: /vol
+  labels:
+    rede: 2
+
+#REDE-01
+- role: worker
+  extraMounts:
+    - hostPath: ./Volumes
+      containerPath: /vol
+  labels:
+    rede: 3
+
+#REDE-02
+- role: worker
+  extraMounts:
+    - hostPath: ./Volumes
+      containerPath: /vol
+  labels:
+    rede: 4
+
+#REDE-02
+- role: worker
+  extraMounts:
+    - hostPath: ./Volumes
+      containerPath: /vol
+  labels:
+    rede: 5
+
+#REDE-02
+- role: worker
+  extraMounts:
+    - hostPath: ./Volumes
+      containerPath: /vol
+  labels:
+    rede: 6
+
+#REDE-03
+- role: worker
+  extraMounts:
+    - hostPath: ./Volumes
+      containerPath: /vol
+  labels:
+    rede: 7
+
+#REDE-03
+- role: worker
+  extraMounts:
+    - hostPath: ./Volumes
+      containerPath: /vol
+  labels:
+    rede: 8
+
+#REDE-03
+- role: worker
+  extraMounts:
+    - hostPath: ./Volumes
+      containerPath: /vol
+  labels:
+    rede: 9
+
+#REDE-04
+- role: worker
+  extraMounts:
+    - hostPath: ./Volumes
+      containerPath: /vol
+  labels:
+    rede: 10
+
+#REDE-04
+- role: worker
+  extraMounts:
+    - hostPath: ./Volumes
+      containerPath: /vol
+  labels:
+    rede: 11
+
+#REDE-04
+- role: worker
+  extraMounts:
+    - hostPath: ./Volumes
+      containerPath: /vol
+  labels:
+    rede: 12
+
+#REDE-05
+- role: worker
+  extraMounts:
+    - hostPath: ./Volumes
+      containerPath: /vol
+  labels:
+    rede: 13
+
+#REDE-05
+- role: worker
+  extraMounts:
+    - hostPath: ./Volumes
+      containerPath: /vol
+  labels:
+    rede: 14
+
+#REDE-05
+- role: worker
+  extraMounts:
+    - hostPath: ./Volumes
+      containerPath: /vol
+  labels:
+    rede: 15
+
+#REDE-06
+- role: worker
+  extraMounts:
+    - hostPath: ./Volumes
+      containerPath: /vol
+  labels:
+    rede: 16
+
+#./Volumes == pasta pessoal

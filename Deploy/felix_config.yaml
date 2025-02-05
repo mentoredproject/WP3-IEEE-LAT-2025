@@ -1,0 +1,9 @@
+apiVersion: projectcalico.org/v3
+kind: FelixConfiguration
+metadata:
+  name: default
+spec:
+  ipipMTU: 1400
+  chainInsertMode: Append # Esta regra pode ser desnecessaria, realizar teste
+  iptablesFilterAllowAction: Return # This parameter controls what happens to traffic that is allowed by a Felix policy chain in the iptables filter table. Use Return to send the traffic back up to the system chains for further processing. 
+  workloadSourceSpoofing: Any # Allow pods to use IP Spoofing

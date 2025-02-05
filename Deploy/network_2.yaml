@@ -1,0 +1,314 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: iot2011
+  annotations:
+    cni.projectcalico.org/ipAddrs: "[\"10.128.20.11\"]"
+spec:
+  volumes:
+  - name: vol
+    hostPath:
+      path: /vol
+  containers:
+  - name: iot2011
+    volumeMounts:
+      - name: vol
+        mountPath: /app/data  # in the container filesystem
+    image: iot:wp3.v2
+    command: ['bash', '-c', ' sleep 30 && tcpdump -w data/Output/Network_02/iot_01.pcap & ./IntelLabData2004.py 10.128.20.30 2000 data/Input/mote_29_humidity.txt data/Output/Network_02/iot_01.txt && tail -f /dev/null']
+  nodeSelector:
+    rede: '6'
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: iot2012
+  annotations:
+    cni.projectcalico.org/ipAddrs: "[\"10.128.20.12\"]"
+spec:
+  volumes:
+  - name: vol
+    hostPath:
+      path: /vol
+  containers:
+  - name: iot2012
+    volumeMounts:
+      - name: vol
+        mountPath: /app/data  # in the container filesystem
+    image: iot:wp3.v2
+    command: ['bash', '-c', ' sleep 30 && tcpdump -w data/Output/Network_02/iot_02.pcap & ./IntelLabData2004.py 10.128.20.30 2000 data/Input/mote_29_voltage.txt data/Output/Network_02/iot_02.txt && tail -f /dev/null']
+  nodeSelector:
+    rede: '6'
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: iot2013
+  annotations:
+    cni.projectcalico.org/ipAddrs: "[\"10.128.20.13\"]"
+spec:
+  volumes:
+  - name: vol
+    hostPath:
+      path: /vol
+  containers:
+  - name: iot2013
+    volumeMounts:
+      - name: vol
+        mountPath: /app/data  # in the container filesystem
+    image: iot:wp3.v2
+    command: ['bash', '-c', ' sleep 30 && tcpdump -w data/Output/Network_02/iot_03.pcap & ./IntelLabData2004.py 10.128.20.30 2000 data/Input/mote_29_temperature.txt data/Output/Network_02/iot_03.txt && tail -f /dev/null']
+  nodeSelector:
+    rede: '6'
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: iot2014
+  annotations:
+    cni.projectcalico.org/ipAddrs: "[\"10.128.20.14\"]"
+spec:
+  volumes:
+  - name: vol
+    hostPath:
+      path: /vol
+  containers:
+  - name: iot2014
+    volumeMounts:
+      - name: vol
+        mountPath: /app/data  # in the container filesystem
+    image: iot:wp3.v2
+    command: ['bash', '-c', ' sleep 30 && tcpdump -w data/Output/Network_02/iot_04.pcap & ./IntelLabData2004.py 10.128.20.30 2000 data/Input/mote_29_light.txt data/Output/Network_02/iot_04.txt && tail -f /dev/null']
+  nodeSelector:
+    rede: '6'
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: iot2015
+  annotations:
+    cni.projectcalico.org/ipAddrs: "[\"10.128.20.15\"]"
+spec:
+  volumes:
+  - name: vol
+    hostPath:
+      path: /vol
+  containers:
+  - name: iot2015
+    volumeMounts:
+      - name: vol
+        mountPath: /app/data  # in the container filesystem
+    image: iot:wp3.v2
+    command: ['bash', '-c', ' sleep 30 && tcpdump -w data/Output/Network_02/iot_05.pcap & ./IntelLabData2004.py 10.128.20.30 2000 data/Input/mote_22_humidity.txt data/Output/Network_02/iot_05.txt && tail -f /dev/null']
+  nodeSelector:
+    rede: '6'
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: iot2016
+  annotations:
+    cni.projectcalico.org/ipAddrs: "[\"10.128.20.16\"]"
+spec:
+  volumes:
+  - name: vol
+    hostPath:
+      path: /vol
+  containers:
+  - name: iot2016
+    volumeMounts:
+      - name: vol
+        mountPath: /app/data  # in the container filesystem
+    image: iot:wp3.v2
+    command: ['bash', '-c', ' sleep 30 && tcpdump -w data/Output/Network_02/iot_06.pcap & ./IntelLabData2004.py 10.128.20.30 2000 data/Input/mote_22_voltage.txt data/Output/Network_02/iot_06.txt && tail -f /dev/null']
+  nodeSelector:
+    rede: '6'
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: iot2017
+  annotations:
+    cni.projectcalico.org/ipAddrs: "[\"10.128.20.17\"]"
+spec:
+  volumes:
+  - name: vol
+    hostPath:
+      path: /vol
+  containers:
+  - name: iot2017
+    volumeMounts:
+      - name: vol
+        mountPath: /app/data  # in the container filesystem
+    image: iot:wp3.v2
+    command: ['bash', '-c', ' sleep 30 && tcpdump -w data/Output/Network_02/iot_07.pcap & ./IntelLabData2004.py 10.128.20.30 2000 data/Input/mote_22_temperature.txt data/Output/Network_02/iot_07.txt && tail -f /dev/null']
+  nodeSelector:
+    rede: '6'
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: iot2018
+  annotations:
+    cni.projectcalico.org/ipAddrs: "[\"10.128.20.18\"]"
+spec:
+  volumes:
+  - name: vol
+    hostPath:
+      path: /vol
+  containers:
+  - name: iot2018
+    volumeMounts:
+      - name: vol
+        mountPath: /app/data  # in the container filesystem
+    image: iot:wp3.v2
+    command: ['bash', '-c', ' sleep 30 && tcpdump -w data/Output/Network_02/iot_08.pcap & ./IntelLabData2004.py 10.128.20.30 2000 data/Input/mote_22_light.txt data/Output/Network_02/iot_08.txt && tail -f /dev/null']
+  nodeSelector:
+    rede: '6'
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: iot2019
+  annotations:
+    cni.projectcalico.org/ipAddrs: "[\"10.128.20.19\"]"
+spec:
+  volumes:
+  - name: vol
+    hostPath:
+      path: /vol
+  containers:
+  - name: iot2019
+    volumeMounts:
+      - name: vol
+        mountPath: /app/data  # in the container filesystem
+    image: iot:wp3.v2
+    command: ['bash', '-c', ' sleep 30 && tcpdump -w data/Output/Network_02/iot_09.pcap & ./IntelLabData2004.py 10.128.20.30 2000 data/Input/mote_36_humidity.txt data/Output/Network_02/iot_09.txt && tail -f /dev/null']
+  nodeSelector:
+    rede: '6'
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: iot2020
+  annotations:
+    cni.projectcalico.org/ipAddrs: "[\"10.128.20.20\"]"
+spec:
+  volumes:
+  - name: vol
+    hostPath:
+      path: /vol
+  containers:
+  - name: iot2020
+    volumeMounts:
+      - name: vol
+        mountPath: /app/data  # in the container filesystem
+    image: iot:wp3.v2
+    command: ['bash', '-c', ' sleep 30 && tcpdump -w data/Output/Network_02/iot_10.pcap & ./IntelLabData2004.py 10.128.20.30 2000 data/Input/mote_36_voltage.txt data/Output/Network_02/iot_10.txt && tail -f /dev/null']
+  nodeSelector:
+    rede: '6'
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: iot2021
+  annotations:
+    cni.projectcalico.org/ipAddrs: "[\"10.128.20.21\"]"
+spec:
+  volumes:
+  - name: vol
+    hostPath:
+      path: /vol
+  containers:
+  - name: iot2021
+    volumeMounts:
+      - name: vol
+        mountPath: /app/data  # in the container filesystem
+    image: iot:wp3.v2
+    command: ['bash', '-c', ' sleep 30 && tcpdump -w data/Output/Network_02/iot_11.pcap & ./IntelLabData2004.py 10.128.20.30 2000 data/Input/mote_36_temperature.txt data/Output/Network_02/iot_11.txt && tail -f /dev/null']
+  nodeSelector:
+    rede: '6'
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: iot2022
+  annotations:
+    cni.projectcalico.org/ipAddrs: "[\"10.128.20.22\"]"
+spec:
+  volumes:
+  - name: vol
+    hostPath:
+      path: /vol
+  containers:
+  - name: iot2022
+    volumeMounts:
+      - name: vol
+        mountPath: /app/data  # in the container filesystem
+    image: iot:wp3.v2
+    command: ['bash', '-c', ' sleep 30 && tcpdump -w data/Output/Network_02/iot_12.pcap & ./IntelLabData2004.py 10.128.20.30 2000 data/Input/mote_36_light.txt data/Output/Network_02/iot_12.txt && tail -f /dev/null']
+  nodeSelector:
+    rede: '6'
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: iot2023
+  annotations:
+    cni.projectcalico.org/ipAddrs: "[\"10.128.20.23\"]"
+spec:
+  volumes:
+  - name: vol
+    hostPath:
+      path: /vol
+  containers:
+  - name: iot2023
+    volumeMounts:
+      - name: vol
+        mountPath: /app/data  # in the container filesystem
+    image: iot:wp3.v2
+    command: ['bash', '-c', ' sleep 30 && tcpdump -w data/Output/Network_02/iot_13.pcap & ./IntelLabData2004.py 10.128.20.30 2000 data/Input/mote_7_humidity.txt data/Output/Network_02/iot_13.txt && tail -f /dev/null']
+  nodeSelector:
+    rede: '6'
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: iot2024
+  annotations:
+    cni.projectcalico.org/ipAddrs: "[\"10.128.20.24\"]"
+spec:
+  volumes:
+  - name: vol
+    hostPath:
+      path: /vol
+  containers:
+  - name: iot2024
+    volumeMounts:
+      - name: vol
+        mountPath: /app/data  # in the container filesystem
+    image: iot:wp3.v2
+    command: ['bash', '-c', ' sleep 30 && tcpdump -w data/Output/Network_02/iot_14.pcap & ./IntelLabData2004.py 10.128.20.30 2000 data/Input/mote_7_voltage.txt data/Output/Network_02/iot_14.txt && tail -f /dev/null']
+  nodeSelector:
+    rede: '6'
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: iot2025
+  annotations:
+    cni.projectcalico.org/ipAddrs: "[\"10.128.20.25\"]"
+spec:
+  volumes:
+  - name: vol
+    hostPath:
+      path: /vol
+  containers:
+  - name: iot2025
+    volumeMounts:
+      - name: vol
+        mountPath: /app/data  # in the container filesystem
+    image: iot:wp3.v2
+    command: ['bash', '-c', ' sleep 30 && tcpdump -w data/Output/Network_02/iot_15.pcap & ./IntelLabData2004.py 10.128.20.30 2000 data/Input/mote_7_temperature.txt data/Output/Network_02/iot_15.txt && tail -f /dev/null']
+  nodeSelector:
+    rede: '6'

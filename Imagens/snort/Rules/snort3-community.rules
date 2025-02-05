@@ -1,0 +1,3 @@
+alert tcp $EXTERNAL_NET any -> $HOME_NET 50002 (flags: S; msg:"Possible TCP DoS"; flow: stateless; detection_filter: track by_dst, count 70, seconds 10; sid:1000020;)
+alert udp $EXTERNAL_NET any -> $HOME_NET 50001 ( msg:" Possible UDP DDOS Flood Detection "; detection_filter:track by_dst,count 1000, seconds 5; sid:1000021; ) 
+alert icmp $EXTERNAL_NET any -> $HOME_NET 50001 (msg:" Possible ICMP DDOS Flood Detection "; detection_filter:track by_dst,count 1000, seconds 5; sid:1000022; ) 

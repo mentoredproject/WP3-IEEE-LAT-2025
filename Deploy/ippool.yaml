@@ -1,0 +1,65 @@
+apiVersion: projectcalico.org/v3
+kind: IPPool
+metadata:
+  name: rede1-ippool
+spec:
+  blockSize: 24
+  cidr: 10.128.10.0/24
+  ipipMode: Never
+  natOutgoing: true
+  nodeSelector: rede == "1"
+---
+apiVersion: projectcalico.org/v3
+kind: IPPool
+metadata:
+  name: rede2-ippool
+spec:
+  blockSize: 24
+  cidr: 10.128.20.0/24
+  ipipMode: Never
+  natOutgoing: true
+  nodeSelector: rede == "4"
+---
+apiVersion: projectcalico.org/v3
+kind: IPPool
+metadata:
+  name: rede3-ippool
+spec:
+  blockSize: 24
+  cidr: 10.128.30.0/24
+  ipipMode: Never
+  natOutgoing: true
+  nodeSelector: rede == "7"
+---
+apiVersion: projectcalico.org/v3
+kind: IPPool
+metadata:
+  name: rede4-ippool
+spec:
+  blockSize: 24
+  cidr: 10.128.40.0/24
+  ipipMode: Never
+  natOutgoing: true
+  nodeSelector: rede == "10"
+---
+apiVersion: projectcalico.org/v3
+kind: IPPool
+metadata:
+  name: rede5-ippool
+spec:
+  blockSize: 24
+  cidr: 10.128.50.0/24
+  ipipMode: Never
+  natOutgoing: true
+  nodeSelector: rede == "13"
+---
+apiVersion: projectcalico.org/v3
+kind: IPPool
+metadata:
+  name: rede6-ippool
+spec:
+  blockSize: 24
+  cidr: 10.128.200.0/24
+  ipipMode: Never
+  natOutgoing: true
+  nodeSelector: rede == "16"
